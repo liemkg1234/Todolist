@@ -1,0 +1,46 @@
+{% extends "base.html" %}
+
+
+{% block title %}{{ user.username }} Notes{% endblock %}
+
+ <!--POST Form if user=s1_user else GET -->
+{% block content %}
+    {% if user.id == s1_user.id %}
+    <h2>Hello {{ user.username }}</h2><hr>
+    <form action="" method="POST" novalidate>
+        {{ form.hidden_tag() }} <!--Create token protect form-->
+        <p>
+            {{ form.data.label}}<br>
+            {{ form.data(size=32) }}
+            {% for error in form.data.errors %}
+            <span style="color: red;">{{ error }}</span>
+            {% endfor %}
+        </p>
+        <p>{{ form.submit() }}</p>
+    </form>
+    {% else %}
+    <h2>{{ s1_user.username }} Notes</h2><hr>
+    {% endif %}
+
+    <!--List Note of User-->
+    <ul class="list-group list-group-flush" id="notes">
+    {% if user.id == s1_user.id %} <!--List my Note of User-->
+        {% for note in user.notes %}
+        <li class="list-group-item">
+            {{ note.data }}
+            <button type="button" class="close" onclick="window.location.href='{{ url_for('note.deleteNote' , note_id=note.id) }}';">
+                <span aria-hidden="true">&times</span>
+            </button>
+        </li>
+        {% endfor %}
+
+    {% else %} <!--List anyone Note of User-->
+        {% for note in s1_user.notes %}
+        <li class="list-group-item">
+            {{ note.data }}
+        </li>
+        {% endfor %}
+    {% endif %}
+    </ul>
+
+{% endblock %}
