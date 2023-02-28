@@ -15,7 +15,7 @@ def signup():
         return redirect(url_for('note.home'))
     # User logging in -> check in DB
     form = SignupForm()
-    if form.validate_on_submit      ():
+    if form.validate_on_submit():
         new_user = User(form.username.data, form.email.data)
         new_user.hash_pw(form.password.data)
         db.session.add(new_user)
